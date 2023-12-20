@@ -1,14 +1,22 @@
-const express=require("express");
+const { app } = require("./app");
 const { connectDB } = require("./db/index");
-const app= express();
 require("dotenv").config()
+const {StatusCode}=require("http-status-codes");
+const { ApiResponse } = require("./utils/ApiResponse");
+
 
 const PORT=process.env.PORT
 
-connectDB()
+connectDB().then(
+    //  after successfull connection with Db ,listen to the server
+    app.listen(5000,console.log(`listening to server at PORT ${PORT}`))
+
+).catch((err)=>console.log("Connection to db failed",err))
 
 app.get("/",(req,res)=>{
-    res.status(200).json({msg:"Home Route"})
+
+    
+   res.json( new ApiResponse(400,{}))
 })
 
 app.listen(PORT,()=>{
